@@ -1,0 +1,59 @@
+# ==============================================================================
+# 1. ESPECÍFICOS DEL PROYECTO (VOLÚMENES LOCALES Y DATOS)
+# ==============================================================================
+# Ignorar las carpetas locales mapeadas como volúmenes en el docker-compose
+/kali_home/
+/outputs/
+
+# Archivos de evidencias, reportes o scripts generados durante las auditorías
+# (Evita subir datos sensibles de tus análisis a GitHub)
+**/evidences/*
+**/reports/*
+**/scripts/*
+
+# Exceptuar archivos de inicialización o plantillas dentro de esas carpetas si los hubiera
+!**/scripts/.gitkeep
+!**/reports/.gitkeep
+
+# ==============================================================================
+# 2. CONFIGURACIONES Y CREDENCIALES
+# ==============================================================================
+# Archivos de entorno que puedan contener claves API o credenciales
+.env
+.env.local
+*.env
+
+# Certificados o llaves SSH locales
+**.pem
+**.key
+.ssh/
+
+# ==============================================================================
+# 3. DOCKER & SISTEMA DE ARCHIVOS
+# ==============================================================================
+# Datos internos si decides usar volúmenes locales en carpetas en lugar de nombrados
+.docker/
+/ollama_data/
+/open-webui_data/
+
+# Archivos temporales o de estado de Docker
+.dockerignore
+
+# ==============================================================================
+# 4. IDES, EDITORES Y SISTEMA OPERATIVO
+# ==============================================================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+
+# Historiales y logs de terminales o tmux
+*.log
+.tmux/
+.bash_history
+
+# Archivos basura del sistema operativo
+.DS_Store
+Thumbs.db

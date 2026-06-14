@@ -1,0 +1,67 @@
+services:
+
+  # 1. Motor de Inferencia: Ollama con soporte oficial para NVIDIA GPU
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_server
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - kaliwebui_net
+    restart: unless-stopped
+
+  # 2. Interfaz Gráfica: Open WebUI conectada a Ollama
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open_webui
+    depends_on:
+      ollama:
+        condition: service_started
+    ports:
+      - "127.0.0.1:3000:8080"
+    environment:
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
+      - 'WEBUI_SECRET_KEY=clave_secreta_para_sesiones_locales_123'
+    volumes:
+      - open-webui_data:/app/backend/data
+    networks:
+      - kaliwebui_net
+    restart: unless-stopped
+
+  # 3. Entorno de Trabajo: Kali Linux Workspace (Actuando como Servidor MCP)
+  kali:
+    build: .
+    container_name: kali_workspace
+    tty: true
+    stdin_open: true
+    depends_on:
+      ollama:
+        condition: service_started
+    ports:
+      - "127.0.0.1:8000:8000" # Accesible desde tu máquina host en localhost:8000
+    networks:
+      - kaliwebui_net
+    environment:
+      - DEFAULT_MODEL=qwen2.5-coder:1.5b
+    volumes:
+      - ./kali_home:/home/kali
+      - ./outputs:/workspace/outputs
+    restart: unless-stopped
+
+networks:
+  kaliwebui_net:
+    name: kaliwebui_net
+    driver: bridge
+
+volumes:
+  ollama_data:
+  open-webui_data:
