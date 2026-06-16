@@ -26,11 +26,21 @@ El contenedor de Kali Linux viene preconfigurado con una selección de herramien
 
 ---
 
-## 🚀 Requisitos Previos y Despliegue
+## 🚀 Requisitos Previos y Compatibilidad
 
-### Requisitos
-* Docker y Docker Compose instalados.
-* **NVIDIA Container Toolkit** (si deseas utilizar la aceleración por hardware de tu GPU).
+El entorno está diseñado para ser totalmente multiplataforma, pero el rendimiento óptimo y el soporte de GPU varían según el sistema operativo:
+
+### 🐧 En Linux (Ubuntu / Debian nativo)
+* **Requisitos:** Docker Engine (evitar versión Snap) y Docker Compose V2 instalado de repositorios oficiales.
+* **Aceleración por GPU:** Requiere **NVIDIA Container Toolkit** para dar acceso a la tarjeta gráfica dentro de los contenedores.
+* **Permisos:** Asegúrate de añadir tu usuario al grupo Docker (`sudo usermod -aG docker $USER`) para ejecutar el entorno sin usar `sudo`.
+
+### 🪟 En Windows (A través de WSL2)
+* **Requisitos:** Docker Desktop configurado obligatoriamente con el motor basado en **WSL2**.
+* **Ejecución:** Se recomienda clonar el repositorio y ejecutar los scripts **dentro del sistema de archivos de Linux en WSL2** (ej. `/home/tu_usuario/...`) y no en los discos compartidos de Windows (`/mnt/c/...`) para evitar problemas con permisos POSIX y optimizar el rendimiento.
+* **Aceleración por GPU:** Asegúrate de tener los drivers de NVIDIA actualizados en Windows; Docker Desktop se encargará de pasar la GPU a WSL2 de forma automática.
+
+---
 
 ### Instrucciones de Arranque
 
@@ -42,7 +52,10 @@ El contenedor de Kali Linux viene preconfigurado con una selección de herramien
 	```
    cd kaliwebui
 	```
-3. Dale permisos de ejecución al inicializador interactivo:
+3. Dale permisos de ejecución al inicializador interactivo que necesites:
+
+    chmod +x init_linux.py
+     ```
          
     ```
     chmod +x init.sh
@@ -52,10 +65,11 @@ El contenedor de Kali Linux viene preconfigurado con una selección de herramien
     
     ```
     ./init.sh
+    ./init_linux.py
     ```
     
 
-El script `init.sh` se encargará de levantar los contenedores, comprobar la conexión y ofrecerte un menú interactivo en la terminal para descargar el modelo de IA que prefieras (se recomienda `qwen2.5-coder:7b` para tareas de scripting y código).
+El script `init.sh` o `init_linux.py` se encargará de levantar los contenedores, comprobar la conexión y ofrecerte un menú interactivo en la terminal para descargar el modelo de IA que prefieras (se recomienda `qwen2.5-coder:7b` para tareas de scripting y código).
 
 ## 🔗 Conexión de Open WebUI con el Servidor MCP
 
