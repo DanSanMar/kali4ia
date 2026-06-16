@@ -45,9 +45,13 @@ exec mcpo --config /etc/mcp/mcp-config.json --port 8000 --host 0.0.0.0
 Paso 1: Inicializar el Entorno
 Ejecuta el script interactivo en tu terminal para levantar los contenedores y descargar el modelo de lenguaje de tu elección (ej. qwen2.5-coder:7b):
 
-Bash
+Bash para WSL2 o Python para Linux
 chmod +x init.sh
 ./init.sh
+
+chmod +x init_linux.py
+./init_linux.py
+
 Paso 2: Vincular el Servidor MCP en Open WebUI
 Abre tu navegador web e ingresa a Open WebUI (http://localhost:3000).
 
