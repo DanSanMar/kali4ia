@@ -41,16 +41,38 @@ Bash
 echo "[ok] Kali Workspace listo. Iniciando Proxy MCP en puerto 8000..."
 # Reemplaza el 'tail -f /dev/null' por la ejecución nativa de mcpo:
 exec mcpo --config /etc/mcp/mcp-config.json --port 8000 --host 0.0.0.0
+
 🚀 3. Puesta en Marcha Paso a Paso
 Paso 1: Inicializar el Entorno
 Ejecuta el script interactivo en tu terminal para levantar los contenedores y descargar el modelo de lenguaje de tu elección (ej. qwen2.5-coder:7b):
 
-Bash para WSL2 o Python para Linux
+### Instrucciones de Arranque
+
+1. Clona este repositorio en tu máquina local:
+   ```
+   git clone [https://github.com/DanSanMar/kaliwebui.git](https://github.com/DanSanMar/kaliwebui.git)
+   ```
+🐧 Opción A: En Linux (Ubuntu / Debian) - Inicializador Inteligente en Python (Recomendado)
+Este script verifica de forma automática los requisitos del sistema, los permisos de tu usuario con Docker y si cuentas con aceleración por hardware (GPU NVIDIA) activa antes de arrancar los contenedores.
+
+Bash
+chmod +x init_linux.py
+./init_linux.py
+🪟 Opción B: En Windows - PowerShell Nativo
+Si prefieres no salir de la consola nativa de Windows, puedes usar el script de PowerShell. Te levantará el entorno de Docker Desktop y gestionará las descargas de Ollama directamente.
+
+PowerShell
+./init_windows.ps1
+Nota: Si Windows te muestra un error de políticas de ejecución, permite la ejecución de scripts locales temporalmente en esa terminal ejecutando: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process antes de lanzar el inicializador.
+
+🐚 Opción C: Script clásico en Bash (Linux / Git Bash en Windows)
+Si estás en Linux o utilizas Git Bash dentro de Windows o una distro en WSL2 y prefieres el despliegue tradicional por consola Bash:
+
+Bash
 chmod +x init.sh
 ./init.sh
 
-chmod +x init_linux.py
-./init_linux.py
+El inicializador seleccionado se encargará de validar los servicios, comprobar que el socket de Ollama responda y ofrecerte un menú interactivo para descargar el Modelo de Lenguaje (LLM) que prefieras (se recomienda qwen2.5-coder:7b para desarrollo/scripting o qwen2.5-coder:1.5b para equipos de recursos limitados).
 
 Paso 2: Vincular el Servidor MCP en Open WebUI
 Abre tu navegador web e ingresa a Open WebUI (http://localhost:3000).
