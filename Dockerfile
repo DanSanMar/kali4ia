@@ -58,6 +58,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tmux \
     wordlists \
     gobuster \
+    arp-scan \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -65,40 +66,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN gunzip /usr/share/wordlists/rockyou.txt.gz || true
 
 # ==============================================================================
-# 5. INTEGRACIÓN MCP (Traducción a HTTP mediante mcpo)
+# 5. INTEGRACIÓN CON OPEN TERMINAL 
 # ==============================================================================
-# Instalamos los servidores globales MCP requeridos
-RUN npm install -g @modelcontextprotocol/server-filesystem
-
-# Instalamos mcpo para exponer los servidores vía HTTP en el puerto 8000
+# Instalamos open-terminal y las librerías de soporte
 RUN pip3 install --no-cache-dir --break-system-packages \
-    mcpo \
+    open-terminal \
     duckduckgo-search \
     openai
 
-# Crear la configuración de MCPO para indicarle qué herramientas levantar vía stdio
-RUN mkdir -p /etc/mcp && echo '{\n\
-  "mcpServers": {\n\
-    "filesystem": {\n\
-      "command": "npx",\n\
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/kali", "/workspace/outputs"]\n\
-    }\n\
-  }\n\
-}' > /etc/mcp/mcp-config.json
-
-# Cliente de Docker estático
+# Cliente de Docker estático (opcional)
 RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-24.0.7.tgz | tar -xzf - --strip-components=1 -C /usr/bin/ docker/docker
 
 # ==============================================================================
 # 6. ENTORNO DE EJECUCIÓN
 # ==============================================================================
+RUN apt-get update && apt-get install -y dos2unix && rm -rf /var/lib/apt/lists/*
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN dos2unix /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /home/kali
 
-# Exponer explícitamente el puerto del Proxy MCP
 EXPOSE 8000
 
+# Arrancamos como root para que el entrypoint configure permisos si es necesario
 USER root
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

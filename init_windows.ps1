@@ -35,18 +35,20 @@ Write-Host "------------------------------------------------------"
 
 # 4. Menu interactivo
 Write-Host ""
-Write-Host "Selecciona una opcion para descargar un modelo:" -ForegroundColor Yellow
+Write-Host "Selecciona un modelo (Sugerencias):" -ForegroundColor Yellow
 Write-Host "1) qwen2.5-coder:7b   (Recomendado)" -ForegroundColor Green
-Write-Host "2) qwen2.5-coder:1.5b (Ligero)" -ForegroundColor Green
+Write-Host "2) gemma4:e4b" -ForegroundColor Green
 Write-Host "3) llama3.1:8b" -ForegroundColor Green
-Write-Host "4) Salir / Mantener actuales"
+Write-Host "4) deepseek-r1:8b" -ForegroundColor Green
+Write-Host "5) Salir / Usar los modelos ya descargados" -ForegroundColor Red
 
 $opcion = Read-Host "Introduce el numero de tu opcion"
 
 $modelo = ""
 if ($opcion -eq "1") { $modelo = "qwen2.5-coder:7b" }
-elseif ($opcion -eq "2") { $modelo = "qwen2.5-coder:1.5b" }
+elseif ($opcion -eq "2") { $modelo = "gemma4:e4b" }
 elseif ($opcion -eq "3") { $modelo = "llama3.1:8b" }
+elseif ($opcion -eq "4") { $modelo = "deepseek-r1:8b" }
 
 if ($modelo -ne "") {
     Write-Host ""

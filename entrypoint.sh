@@ -47,10 +47,10 @@ done
 # Asegurar permisos correctos del volumen mapeado
 chown -R kali:kali /home/kali
 
+
 echo "------------------------------------------------"
-echo "[ok] Kali Workspace listo. Iniciando Proxy MCP en puerto 8000..."
+echo "[setup] Iniciando Servidor Open Terminal en Kali Linux..."
 echo "------------------------------------------------"
 
-# Ejecutamos mcpo apuntando a nuestra configuración. 
-# Esto mantendrá el contenedor activo y escuchando peticiones HTTP.
-exec mcpo --config /etc/mcp/mcp-config.json --port 8000 --host 0.0.0.0
+# Forzamos los parámetros directamente por comandos de CLI para evitar fallos de lectura
+exec open-terminal run --host 0.0.0.0 --port 8000 --api-key "$OPEN_TERMINAL_API_KEY"
